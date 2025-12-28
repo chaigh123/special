@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>二元一次方程组 - 分步教学</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body { font-family: 'Microsoft YaHei', sans-serif; display: flex; flex-direction: column; align-items: center; background: #f4f7f9; padding: 20px; }
+        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 800px; }
+        .equation-display { background: #e8f4ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 6px solid #2196F3; font-size: 1.2em; line-height: 1.6; }
+        .btn-group { margin-bottom: 20px; display: flex; gap: 10px; justify-content: center; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; border: none; border-radius: 5px; transition: 0.3s; color: white; }
+        .btn-1 { background-color: #ef5350; }
+        .btn-2 { background-color: #42a5f5; }
+        .btn-3 { background-color: #4caf50; }
+        button:hover { opacity: 0.8; }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
+        #plot { width: 100%; height: 500px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>数形结合：分步解二元一次方程组</h2>
+    
+    <div class="equation-display">
+        <b>方程组：</b><br>
+        ① 5x + y = 42  →  <span style="color:#ef5350">l<sub>1</sub>: y = -5x + 42</span><br>
+        ② x + 5y = 18  →  <span style="color:#42a5f5">l<sub>2</sub>: y = -0.2x + 3.6</span>
+    </div>
+
+    <div class="btn-group">
+        <button class="btn-1" onclick="drawStep1()">第一步：画出直线 l<sub>1</sub></button>
+        <button class="btn-2" id="btn-step2" onclick="drawStep2()" disabled>第二步：画出直线 l<sub>2</sub></button>
+        <button class="btn-3" id="btn-step3" onclick="drawStep3()" disabled>第三步：呈现交点</button>
+        <button style="background: #607d8b;" onclick="location.reload()">重置</button>
+    </div>
+
+    <div id="plot"></div>
+</div>
+
+<script>
+    const xValues = [];
+    for (let x = 0; x <= 12; x += 0.2) xValues.push(x);
+
+    const layout = {
+        xaxis: { title: 'x轴', range: [0, 12] },
+        yaxis: { title: 'y轴', range: [-5, 45] },
+        showlegend: true
+    };
+
+    Plotly.newPlot('plot', [], layout);
+
+    function drawStep1() {
+        const trace1 = {
+            x: xValues, y: xValues.map(x => -5 * x + 42),
+            mode: 'lines', name: 'y<sub>1</sub> = -5x + 42',
+            line: { color: '#ef5350', width: 3 }
+        };
+        Plotly.addTraces('plot', trace1);
+        document.querySelector('.btn-1').disabled = true;
+        document.getElementById('btn-step2').disabled = false;
+    }
+
+    function drawStep2() {
+        const trace2 = {
+            x: xValues, y: xValues.map(x => -0.2 * x + 3.6),
+            mode: 'lines', name: 'y<sub>2</sub> = -0.2x + 3.6',
+            line: { color: '#42a5f5', width: 3 }
+        };
+        Plotly.addTraces('plot', trace2);
+        document.getElementById('btn-step2').disabled = true;
+        document.getElementById('btn-step3').disabled = false;
+    }
+
+    function drawStep3() {
+        const intersection = {
+            x: [8], y: [2],
+            mode: 'markers+text', name: '交点',
+            text: ['(8, 2)'], textposition: 'top right',
+            marker: { color: 'black', size: 12 }
+        };
+        Plotly.addTraces('plot', intersection);
+        document.getElementById('btn-step3').disabled = true;
+    }
+</script>
+</body>
+</html>
